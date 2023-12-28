@@ -8,7 +8,7 @@ __version__ = "0.1.0"
 
 # Data
 class1 = ['Erik', 'Maia', 'Gustavo', 'Manuel', 'Sofia', 'Joana']
-class2 = ['João', 'Antonio', 'Carlos', 'Antonio']
+class2 = ['João', 'Antonio', 'Carlos', 'Maria', 'Isolda']
 
 english_lesson = ['Erik', 'Maia', 'Joana', 'Carlos', 'Antonio']
 music_lesson = ['Erik', 'Carlos', 'Maria']
