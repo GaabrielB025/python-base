@@ -15,21 +15,21 @@ Execution:
 
     python3 hello.py
 """
-__version__ = "0.0.1"
+__version__ = "0.1.2"
 __author__ = "Gabriel Barbosa"
 
 import os
 
 current_language = str(os.getenv("LANG", "en_US"))[:5]
-message = "Hello, World!"
 
-if current_language == "pt_BR":
-    message = "Olá, Mundo!"
-elif current_language == "it_IT":
-    message = "Ciao, Mondo!"
-elif current_language == "es_SP":
-    message = "Hola mundo"
-elif current_language == "fr_FR":
-    message = "Bonjour Monde"
+messages = {
+    'pt_BR': 'Olá, mundo!',
+    'it_IT': 'Ciao, Mondo!',
+    'es_SP': 'Hola, Mundo!',
+    'fr_FR': 'Bonjour, Monde!',
+    'en_US': 'Hello, World!'
+}
 
-print(message)
+msg = messages.get(current_language)
+print(msg)
+
