@@ -4,7 +4,7 @@
 Imprimir a lista de criaças agrupadas por sala
 que frequentam cada uma das atividades.
 """
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 # Data
 class1 = ['Erik', 'Maia', 'Gustavo', 'Manuel', 'Sofia', 'Joana']
