@@ -23,11 +23,21 @@ Uso:
     n1: 20
     n2: 10
     30
+
+O histórico será salvo em `prefixcalc.log`
 """
 __version__ = '0.1.0'
 __author__ = 'Gabriel'
 
 import sys
+import os
+from datetime import datetime
+
+
+current_time = datetime.now().ctime()
+user = os.getenv('USER')
+path = os.curdir
+filepath = os.path.join(path, 'prefixcalc.log')
 
 operations = {
     'sum': lambda a, b: a + b,
@@ -73,6 +83,9 @@ for num in numbers:
     validated_numbers.append(num)
 
 n1, n2 = validated_numbers
-
 result = operations[operation](n1, n2)
+
+with open(filepath, 'a') as file_:
+    file_.write(f'{current_time} - {user} - {operation} {n1} {n2} = {result}\n')
+
 print(f'The result is: {result:.1f}')
