@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""Envia um email para uma lista de emails passada como argumento."""
+
+__version__ = '0.1.1'
 
 import os
 import sys
@@ -15,8 +18,7 @@ elif len(arguments) != 2:
     print(MSG_ERR)
     sys.exit()
 
-filename = arguments[0]
-templatename = arguments[1]
+filename, templatename = arguments
 
 path = os.curdir
 filepath = os.path.join(path, filename)
@@ -27,7 +29,7 @@ for line in open(filepath):
     client, email = line.split(',')
 
     print(f'Mandando email para: {email}')
-    with open(templatepath, 'r') as file_:
+    with open(templatepath) as file_:
         print(
             file_.read()
             % dict(
