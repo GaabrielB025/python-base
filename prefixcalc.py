@@ -57,7 +57,7 @@ if not arguments:
     n2 = input('n2: ').strip()
     arguments = [operation, n1, n2]
 elif len(arguments) != 3:
-    print('Number of invalid arguments!')
+    print('Invalid number of arguments!')
     print('You can try: `sum 5 10`')
     sys.exit(1)
 
@@ -71,19 +71,24 @@ if operation not in operations:
 validated_numbers = []
 for num in numbers:
     # TODO: Repetição while + exceptions
-    if not num.replace('.', '').isdigit():
+    try:
+        if '.' in num:
+            num = float(num)
+        else:
+            num = int(num)
+    except ValueError:
         print(f'Invalid number `{num}`')
         sys.exit(1)
-
-    if '.' in num:
-        num = float(num)
-    else:
-        num = int(num)
 
     validated_numbers.append(num)
 
 n1, n2 = validated_numbers
-result = operations[operation](n1, n2)
+
+try:
+    result = operations[operation](n1, n2)
+except ZeroDivisionError:
+    print("You can't divite by zero!")
+    sys.exit(1)
 
 with open(filepath, 'a') as file_:
     file_.write(f'{current_time} - {user} - {operation} {n1} {n2} = {result}\n')

@@ -51,10 +51,14 @@ if option == 'write':
         file_.write('\t'.join(text) + '\n')
 
 if option == 'read':
-    for line in open(filepath):
-        title, tag, text = line.split('\t')
+    try:
+        for line in open(filepath):
+            title, tag, text = line.split('\t')
 
-        if tag.lower() == argument.lower():
-            print(f'Title: {title}\nText: {text}')
-            print('-' * 30)
+            if tag.lower() == argument.lower():
+                print(f'Title: {title}\nText: {text}')
+                print('-' * 30)
+    except FileNotFoundError:
+        print('No file notes to read. Please create a note first.')
+        sys.exit(1)
     

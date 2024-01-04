@@ -25,16 +25,30 @@ __author__ = "Gabriel Barbosa"
 import os
 import sys
 
+HELP = """
+$ hello.py [OPTIONS]
+
+LANG = [pt_BR, 'en_US', 'it_IT', 'fr_FR', 'es_SP']
+
+Options:
+    --lang=LANG          print the message in LANG
+    --count=n            repeate the print n times
+"""
+
 arguments = {
     'lang': None,
     'count': 1,
 }
 
-valid_languages = ('pt_BR', 'en_US', 'it_IT', 'fr_FR', 'es_SP')
-
 for arg in sys.argv[1:]:
-    # TODO: Tratar ValueError
-    key, value = arg.split('=')
+    try:
+        key, value = arg.split('=')
+    except ValueError as e:
+        # TODO: Substituir por logging
+        print(f'Invalid argument `{arg}`')
+        print(HELP)
+        sys.exit(1)
+
     value = value.strip()
     key = key.lstrip('-').strip()
 
@@ -63,5 +77,19 @@ messages = {
     'en_US': 'Hello, World!'
 }
 
-print(messages[current_language] * int(arguments['count']))
+# message = messages.get(current_language, messages['en_US'])
 
+try:
+    message = messages[current_language]
+except KeyError:
+    print(f'Invalid language: `{current_language}`')
+    print(f'You can try one of these: {list(messages.keys())}')
+    sys.exit(1)
+
+try:
+    count = int(arguments['count'])
+except ValueError:
+    print('Please, enter only numbers.')
+    sys.exit(1)
+
+print(message * count)
