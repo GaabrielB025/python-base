@@ -26,13 +26,19 @@ Uso:
 
 O histórico será salvo em `prefixcalc.log`
 """
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 __author__ = 'Gabriel'
 
 import sys
 import os
 from datetime import datetime
+import logging
 
+# TODO: Função
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(levelname)s l:%(lineno)d f:%(filename)s %(message)s',
+)
 
 current_time = datetime.now().ctime()
 user = os.getenv('USER')
@@ -50,25 +56,25 @@ valid_operations = ('sum', 'sub', 'mul', 'div')
 
 arguments = sys.argv[1:]
 
-# TODO: Exceptions
 if not arguments:
     operation = input('operation: ').strip()
     n1 = input('n1: ').strip()
     n2 = input('n2: ').strip()
     arguments = [operation, n1, n2]
 elif len(arguments) != 3:
-    print('Invalid number of arguments!')
+    logging.error('Invalid number of arguments!')
     print('You can try: `sum 5 10`')
     sys.exit(1)
 
 operation, *numbers = arguments
 
 if operation not in operations:
-    print(f'`{operation}` is not a valid operation')
+    logging.error('`%s` is not a valid operation', operation)
     print(f'You can choose one of these: {valid_operations}')
     sys.exit(1)
 
 validated_numbers = []
+
 for num in numbers:
     # TODO: Repetição while + exceptions
     try:
@@ -77,7 +83,7 @@ for num in numbers:
         else:
             num = int(num)
     except ValueError:
-        print(f'Invalid number `{num}`')
+        logging.error('Invalid number `%s`', num)
         sys.exit(1)
 
     validated_numbers.append(num)
@@ -87,7 +93,7 @@ n1, n2 = validated_numbers
 try:
     result = operations[operation](n1, n2)
 except ZeroDivisionError:
-    print("You can't divite by zero!")
+    logging.error("You can't divite by zero!")
     sys.exit(1)
 
 with open(filepath, 'a') as file_:

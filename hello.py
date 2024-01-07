@@ -24,6 +24,7 @@ __author__ = "Gabriel Barbosa"
 
 import os
 import sys
+import logging
 
 HELP = """
 $ hello.py [OPTIONS]
@@ -35,6 +36,17 @@ Options:
     --count=n            repeate the print n times
 """
 
+# TODO: Função
+log_level = os.getenv('LOG_LEVEL', 'INFO').upper()
+logger = logging.Logger(log_level)
+ch = logging.StreamHandler()
+ch.setLevel(log_level)
+fmt = logging.Formatter(
+    '%(levelname)s l:%(lineno)d f:%(filename)s %(message)s'
+)
+ch.setFormatter(fmt)
+logger.addHandler(ch)
+
 arguments = {
     'lang': None,
     'count': 1,
@@ -44,8 +56,7 @@ for arg in sys.argv[1:]:
     try:
         key, value = arg.split('=')
     except ValueError as e:
-        # TODO: Substituir por logging
-        print(f'Invalid argument `{arg}`')
+        logger.error('Invalid argument `%s`', arg)
         print(HELP)
         sys.exit(1)
 
@@ -53,7 +64,8 @@ for arg in sys.argv[1:]:
     key = key.lstrip('-').strip()
 
     if key not in arguments:
-        print(f'`{key}` is not a valid argument!')
+        logger.error('`%s` is not a valid argument!', key)
+        print(HELP)
         sys.exit(1)
 
     arguments[key] = value
@@ -82,14 +94,14 @@ messages = {
 try:
     message = messages[current_language]
 except KeyError:
-    print(f'Invalid language: `{current_language}`')
+    logger.error('Invalid language: `%s`', current_language)
     print(f'You can try one of these: {list(messages.keys())}')
     sys.exit(1)
 
 try:
     count = int(arguments['count'])
 except ValueError:
-    print('Please, enter only numbers.')
+    logger.error('Please, enter only numbers.')
     sys.exit(1)
 
 print(message * count)
