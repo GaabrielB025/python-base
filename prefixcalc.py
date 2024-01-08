@@ -12,12 +12,6 @@ Operações:
     div -> /
 
 Uso:
-    $ prefixcalc.py sum 5 2
-    7
-
-    $ prefixcalc.py mul 10 5
-    50
-
     $ prefixcalc.py
     operação: sum
     n1: 20
@@ -26,10 +20,9 @@ Uso:
 
 O histórico será salvo em `prefixcalc.log`
 """
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __author__ = 'Gabriel'
 
-import sys
 import os
 from datetime import datetime
 import logging
@@ -52,51 +45,35 @@ operations = {
     'div': lambda a, b: a / b,
 }
 
-valid_operations = ('sum', 'sub', 'mul', 'div')
-
-arguments = sys.argv[1:]
-
-if not arguments:
+while True:
     operation = input('operation: ').strip()
-    n1 = input('n1: ').strip()
-    n2 = input('n2: ').strip()
-    arguments = [operation, n1, n2]
-elif len(arguments) != 3:
-    logging.error('Invalid number of arguments!')
-    print('You can try: `sum 5 10`')
-    sys.exit(1)
-
-operation, *numbers = arguments
-
-if operation not in operations:
-    logging.error('`%s` is not a valid operation', operation)
-    print(f'You can choose one of these: {valid_operations}')
-    sys.exit(1)
-
-validated_numbers = []
-
-for num in numbers:
-    # TODO: Repetição while + exceptions
     try:
-        if '.' in num:
-            num = float(num)
-        else:
-            num = int(num)
+        n1 = float(input('n1: ').strip())
     except ValueError:
-        logging.error('Invalid number `%s`', num)
-        sys.exit(1)
+        logging.error('please only provide numbers')
+        continue
 
-    validated_numbers.append(num)
+    try:
+        n2 = float(input('n2: ').strip())
+    except ValueError:
+        logging.error('please only provide numbers')
+        continue
 
-n1, n2 = validated_numbers
+    if operation not in operations:
+        logging.error('`%s` is not a valid operation', operation)
+        print(f'You can choose one of these: {list(operations.keys())}')
+        continue
 
-try:
-    result = operations[operation](n1, n2)
-except ZeroDivisionError:
-    logging.error("You can't divite by zero!")
-    sys.exit(1)
+    try:
+        result = operations[operation](n1, n2)
+    except ZeroDivisionError:
+        logging.error("You can't divite by zero!")
+        continue
 
-with open(filepath, 'a') as file_:
-    file_.write(f'{current_time} - {user} - {operation} {n1} {n2} = {result}\n')
+    with open(filepath, 'a') as file_:
+        file_.write(f'{current_time} - {user} - {operation} {n1} {n2} = {result}\n')
 
-print(f'The result is: {result:.1f}')
+    print(f'The result is: {result:.1f}')
+
+    if input('Press enter to continue or any key to out '):
+        break
